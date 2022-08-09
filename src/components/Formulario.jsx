@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import useSelectModenas from '../hooks/useSelectModenas';
 import {monedas} from '../data/monedas';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 const InputSubmit = styled.input`
   background-color: #9497FF;
   border: none;
@@ -20,19 +20,37 @@ const InputSubmit = styled.input`
     cursor: pointer;
   }
 `
-//const API_KEY = 57dafe30a1d9636d6039bd27a00f73df4d3c1a9f5abf052b18c38df36dd5e154;
 const Formulario = () => {
-
+  const [criptoMonedas, setCriptoMonedas] = useState([]);
+  
   useEffect(()=>{
+    const API = 'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD';
     
+    const consultarApi = async ()=>{
+      const response = await fetch(API);
+      const result = await response.json();
+      const data = await result.Data;
+      
+      const criptos = data.map((cripto)=>{
+
+        const objeto = {
+          id:cripto.CoinInfo.Name,
+          nombre: cripto.CoinInfo.FullName
+        }
+        return objeto;
+      });
+      setCriptoMonedas(criptos);
+    }
+    consultarApi();
+
   }, [])
 
   const [moneda, SelectMonedas] = useSelectModenas('Elige tu moneda', monedas);
-  
+  const [criptoMoneda, SelectCriptoMonedas] = useSelectModenas('Elige tu cripto moneda', criptoMonedas);
   return (
     <form>
       <SelectMonedas/>
-
+      <SelectCriptoMonedas/>
       <InputSubmit 
         type="submit" 
         value="Cotizar"
