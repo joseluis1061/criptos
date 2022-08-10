@@ -20,11 +20,12 @@ const InputSubmit = styled.input`
     cursor: pointer;
   }
 `
-const Formulario = () => {
+const Formulario = ({setMonedas}) => {
   const [criptoMonedas, setCriptoMonedas] = useState([]);
   
   useEffect(()=>{
-    const API = 'https://min-api.cryptocompare.com/data/top/mktcapfull?limit=10&tsym=USD';
+ 
+    const API = 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD';
     
     const consultarApi = async ()=>{
       const response = await fetch(API);
@@ -45,10 +46,24 @@ const Formulario = () => {
 
   }, [])
 
+
+  //Consultar precios
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    console.log('Formulario');
+    console.log(`moneda ${moneda} criptoMoneda ${criptoMoneda}`)
+
+    if(moneda && criptoMoneda){
+      setMonedas({moneda, criptoMoneda});
+    }else{
+      console.log('Faltan datos')
+    }
+  }
+
   const [moneda, SelectMonedas] = useSelectModenas('Elige tu moneda', monedas);
   const [criptoMoneda, SelectCriptoMonedas] = useSelectModenas('Elige tu cripto moneda', criptoMonedas);
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <SelectMonedas/>
       <SelectCriptoMonedas/>
       <InputSubmit 
