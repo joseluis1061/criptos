@@ -121,8 +121,6 @@ const Formulario = ({setMonedas}) => {
     useEffect(() => {
         const consultarAPI = async () => {
             const API = 'https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD';
-    
-            const url = "https://min-api.cryptocompare.com/data/top/mktcapfull?limit=20&tsym=USD"
             const respuesta = await fetch(API)
             const resultado = await respuesta.json()
 
